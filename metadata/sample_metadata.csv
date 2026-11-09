@@ -1,0 +1,76 @@
+sample,group,organism,origin,community,site,replicate,pooled,unknown_site,primary_include,mode
+vdc121WL,WL,Waterleaf,Niger Delta,1,2,1,FALSE,FALSE,TRUE,NEG
+vdc43CS,CS,Cassava,Niger Delta,4,3,single,FALSE,FALSE,TRUE,NEG
+vdc125WL,WL,Waterleaf,Niger Delta,1,2,5,FALSE,FALSE,TRUE,NEG
+vdc221PL,PL,Plantain,Niger Delta,2,2,1,FALSE,FALSE,TRUE,NEG
+vdc121PL,PL,Plantain,Niger Delta,1,2,1,FALSE,FALSE,TRUE,NEG
+vdc211WL,WL,Waterleaf,Niger Delta,2,1,1,FALSE,FALSE,TRUE,NEG
+vdc311WL,WL,Waterleaf,Niger Delta,3,1,1,FALSE,FALSE,TRUE,NEG
+vdc125PL,PL,Plantain,Niger Delta,1,2,5,FALSE,FALSE,TRUE,NEG
+vdc231PL,PL,Plantain,Niger Delta,2,3,1,FALSE,FALSE,TRUE,NEG
+vdc42CS,CS,Cassava,Niger Delta,4,2,single,FALSE,FALSE,TRUE,NEG
+vdc122WL,WL,Waterleaf,Niger Delta,1,2,2,FALSE,FALSE,TRUE,NEG
+vdc211PL,PL,Plantain,Niger Delta,2,1,1,FALSE,FALSE,TRUE,NEG
+vdc122PL,PL,Plantain,Niger Delta,1,2,2,FALSE,FALSE,TRUE,NEG
+vdc212PL,PL,Plantain,Niger Delta,2,1,2,FALSE,FALSE,TRUE,NEG
+vdc34WL,WL,Waterleaf,Niger Delta,3,4,single,FALSE,FALSE,TRUE,NEG
+vdc321PL,PL,Plantain,Niger Delta,3,2,1,FALSE,FALSE,TRUE,NEG
+vdc45CS,CS,Cassava,Niger Delta,4,5,single,FALSE,FALSE,TRUE,NEG
+vdc110,PL,Plantain,Niger Delta,1,1,0,FALSE,FALSE,TRUE,NEG
+vdc214WL,WL,Waterleaf,Niger Delta,2,1,4,FALSE,FALSE,TRUE,NEG
+vdc311PL,PL,Plantain,Niger Delta,3,1,1,FALSE,FALSE,TRUE,NEG
+vdc33PL,PL,Plantain,Niger Delta,3,3,single,FALSE,FALSE,TRUE,NEG
+vdn01PL,PL,Plantain,Niger Delta,1,NA,unknown,FALSE,TRUE,FALSE,NEG
+vdc321WL,WL,Waterleaf,Niger Delta,3,2,1,FALSE,FALSE,TRUE,NEG
+vdn01WL,WL,Waterleaf,Niger Delta,1,NA,unknown,FALSE,TRUE,FALSE,NEG
+vdc111-113,PL,Plantain,Niger Delta,1,1,pooled_111_113,TRUE,FALSE,FALSE,NEG
+vdc33WL,WL,Waterleaf,Niger Delta,3,3,single,FALSE,FALSE,TRUE,NEG
+vdc212WL,WL,Waterleaf,Niger Delta,2,1,2,FALSE,FALSE,TRUE,NEG
+vdc233PL,PL,Plantain,Niger Delta,2,3,3,FALSE,FALSE,TRUE,NEG
+vdc321,PL,Plantain,Niger Delta,3,2,1,FALSE,FALSE,TRUE,NEG
+vcd215WL,WL,Waterleaf,Niger Delta,2,1,5,FALSE,FALSE,TRUE,NEG
+vcd41CS,CS,Cassava,Niger Delta,4,1,single,FALSE,FALSE,TRUE,NEG
+V214PL,PL,Plantain,Niger Delta,2,1,4,FALSE,FALSE,TRUE,NEG
+V44CS,CS,Cassava,Niger Delta,4,4,single,FALSE,FALSE,TRUE,NEG
+V233WL,WL,Waterleaf,Niger Delta,2,3,3,FALSE,FALSE,TRUE,NEG
+V233PL,PL,Plantain,Niger Delta,2,3,3,FALSE,FALSE,TRUE,NEG
+V221PL,PL,Plantain,Niger Delta,2,2,1,FALSE,FALSE,TRUE,NEG
+V215PL,PL,Plantain,Niger Delta,2,1,5,FALSE,FALSE,TRUE,NEG
+V231WL,WL,Waterleaf,Niger Delta,2,3,1,FALSE,FALSE,TRUE,NEG
+VN94WL,WLcont,Waterleaf,Ibadan,Ibadan_reference,single_reference_site,VN94WL,FALSE,FALSE,TRUE,NEG
+VN93PL,PLcont,Plantain,Ibadan,Ibadan_reference,single_reference_site,VN93PL,FALSE,FALSE,TRUE,NEG
+VN93CS,CScont,Cassava,Ibadan,Ibadan_reference,single_reference_site,VN93CS,FALSE,FALSE,TRUE,NEG
+VN93WL,WLcont,Waterleaf,Ibadan,Ibadan_reference,single_reference_site,VN93WL,FALSE,FALSE,TRUE,NEG
+VN94CS,CScont,Cassava,Ibadan,Ibadan_reference,single_reference_site,VN94CS,FALSE,FALSE,TRUE,NEG
+VN92CS,CScont,Cassava,Ibadan,Ibadan_reference,single_reference_site,VN92CS,FALSE,FALSE,TRUE,NEG
+VN92WL,WLcont,Waterleaf,Ibadan,Ibadan_reference,single_reference_site,VN92WL,FALSE,FALSE,TRUE,NEG
+VN92PL,PLcont,Plantain,Ibadan,Ibadan_reference,single_reference_site,VN92PL,FALSE,FALSE,TRUE,NEG
+VN94PL,PLcont,Plantain,Ibadan,Ibadan_reference,single_reference_site,VN94PL,FALSE,FALSE,TRUE,NEG
+VN91PL,PLcont,Plantain,Ibadan,Ibadan_reference,single_reference_site,VN91PL,FALSE,FALSE,TRUE,NEG
+VN91WL,WLcont,Waterleaf,Ibadan,Ibadan_reference,single_reference_site,VN91WL,FALSE,FALSE,TRUE,NEG
+VN91CS,CScont,Cassava,Ibadan,Ibadan_reference,single_reference_site,VN91CS,FALSE,FALSE,TRUE,NEG
+VN95WL,WLcont,Waterleaf,Ibadan,Ibadan_reference,single_reference_site,VN95WL,FALSE,FALSE,TRUE,NEG
+VN95PL,PLcont,Plantain,Ibadan,Ibadan_reference,single_reference_site,VN95PL,FALSE,FALSE,TRUE,NEG
+VN95CS,CScont,Cassava,Ibadan,Ibadan_reference,single_reference_site,VN95CS,FALSE,FALSE,TRUE,NEG
+F336,F,Flies,Niger Delta,3,3,6,FALSE,FALSE,TRUE,NEG
+F341,F,Flies,Niger Delta,3,4,1,FALSE,FALSE,TRUE,NEG
+Frm41,Fcont,Flies,Port Harcourt residential,Port Harcourt residential,unknown_control_site,Frm41,FALSE,FALSE,TRUE,NEG
+F314,F,Flies,Niger Delta,3,1,4,FALSE,FALSE,TRUE,NEG
+F323b,F,Flies,Niger Delta,3,2,3b,FALSE,FALSE,TRUE,NEG
+F338b,F,Flies,Niger Delta,3,3,8b,FALSE,FALSE,TRUE,NEG
+F337,F,Flies,Niger Delta,3,3,7,FALSE,FALSE,TRUE,NEG
+F342,F,Flies,Niger Delta,3,4,2,FALSE,FALSE,TRUE,NEG
+F333,F,Flies,Niger Delta,3,3,3,FALSE,FALSE,TRUE,NEG
+F312,F,Flies,Niger Delta,3,1,2,FALSE,FALSE,TRUE,NEG
+F322,F,Flies,Niger Delta,3,2,2,FALSE,FALSE,TRUE,NEG
+F334a,F,Flies,Niger Delta,3,3,4a,FALSE,FALSE,TRUE,NEG
+F343,F,Flies,Niger Delta,3,4,3,FALSE,FALSE,TRUE,NEG
+F338a,F,Flies,Niger Delta,3,3,8a,FALSE,FALSE,TRUE,NEG
+F311,F,Flies,Niger Delta,3,1,1,FALSE,FALSE,TRUE,NEG
+F338c,F,Flies,Niger Delta,3,3,8c,FALSE,FALSE,TRUE,NEG
+F335,F,Flies,Niger Delta,3,3,5,FALSE,FALSE,TRUE,NEG
+F338c.1,F,Flies,Niger Delta,3,3,8c.1,FALSE,FALSE,TRUE,NEG
+F331,F,Flies,Niger Delta,3,3,1,FALSE,FALSE,TRUE,NEG
+Frm42,Fcont,Flies,Port Harcourt residential,Port Harcourt residential,unknown_control_site,Frm42,FALSE,FALSE,TRUE,NEG
+FN11,Fcont,Flies,Ibadan,Ibadan,unknown_control_site,FN11,FALSE,FALSE,TRUE,NEG
+FN42,Fcont,Flies,Ibadan,Ibadan,unknown_control_site,FN42,FALSE,FALSE,TRUE,NEG
