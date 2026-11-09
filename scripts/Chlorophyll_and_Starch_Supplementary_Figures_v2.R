@@ -1,0 +1,177 @@
+# Supplementary figures: chlorophyll catabolites and starch-related oligosaccharides
+# Uses authoritative Proposed_annotation in complete_v2_feature_statistics_annotated.csv
+# Uses primary biological specimens and the original relative-intensity matrices.
+# Set working directory to the folder containing the three CSVs before sourcing.
+# Install once: install.packages(c('ggplot2','dplyr','scales'))
+suppressPackageStartupMessages({library(ggplot2); library(dplyr); library(scales)})
+
+locate <- function(stem) {
+  hits <- list.files('.', pattern='\\.csv$', full.names=TRUE)
+  exact <- hits[basename(hits) %in% c(paste0(stem,'.csv'),paste0(stem,'(1).csv'))]
+  if(length(exact)) return(exact[1])
+  hits <- hits[grepl(paste0('^',stem,'(\\\\([0-9]+\\\\))?\\.csv$'),basename(hits))]
+  if(length(hits)) return(hits[1])
+  stop('Cannot find ',stem,'.csv in ',getwd(),'. Check getwd() and list.files().')
+}
+# Prefer exact names; fallback handles (1) file suffix.
+find_csv <- function(base) {
+  x <- c(paste0(base,'.csv'),paste0(base,'(1).csv'))
+  y <- x[file.exists(x)]
+  if(length(y)) return(y[1])
+  stop('Missing ',base,' CSV in ',getwd(),'. Files present: ',paste(list.files(pattern='\\.csv$'),collapse=', '))
+}
+neg_file <- find_csv('neg_relativized_QC8_removed')
+pos_file <- find_csv('pos_relativized_QC8_removed')
+meta_file <- find_csv('sample_metadata')
+stats_file <- find_csv('complete_v2_feature_statistics_annotated')
+output_dir <- 'Chlorophyll_Starch_Supplementary_Figures'
+dir.create(output_dir,recursive=TRUE,showWarnings=FALSE)
+
+# Feature IDs were verified against the CURRENT proposed annotation column.
+# IMPORTANT: sample_metadata.csv contains NEG-labelled rows only; metadata
+# applies to both NEG and POS runs because the sample columns match.
+selected <- data.frame(
+ section=c(rep('Chlorophyll',7),rep('Starch',4)),
+ compound=c('Pheophorbide a','Methylpheophorbide a','Dimethylpheophorbide a',
+            'Pyropheophorbide a','Epoxypheophorbide a',
+            'Putative hydroxyepoxypheophorbide a',
+            'Putative hydroxydiepoxypheophorbide a',
+            'Maltose','Maltose isomer','Maltotriose','Maltotetraose'),
+ mode=c('NEG','POS','POS','POS','POS','POS','NEG','NEG','POS','NEG','NEG'),
+ feature_id=c('591.2615_1.44_830','607.2917_1.42_1672','621.3072_1.6_2107',
+              '535.2706_1.5_1814','609.2708_1.51_1823',
+              '625.2655_1.92_3995','637.2303_1.9_2908',
+              '341.1083_14.68_28004','343.1237_11.55_27027',
+              '503.1615_13.84_27232','665.2145_14.47_27730'),
+ stringsAsFactors=FALSE)
+
+meta <- read.csv(meta_file,check.names=FALSE,stringsAsFactors=FALSE)
+meta <- meta[as.character(meta$primary_include) %in% c('TRUE','True','true','1') &
+               meta$organism %in% c('Cassava','Plantain','Waterleaf','Flies'),,drop=FALSE]
+meta$region <- ifelse(meta$origin=='Niger Delta','Niger Delta','Reference')
+meta$organism <- as.character(meta$organism)
+raws <- list(NEG=read.csv(neg_file,check.names=FALSE,stringsAsFactors=FALSE),
+             POS=read.csv(pos_file,check.names=FALSE,stringsAsFactors=FALSE))
+for(mode in names(raws)) {
+ if(!'row m/z' %in% names(raws[[mode]])) stop('Missing row m/z column in ',mode)
+ if(anyDuplicated(raws[[mode]][['row m/z']])) stop('Duplicate feature IDs in ',mode)
+}
+st <- read.csv(stats_file,check.names=FALSE,stringsAsFactors=FALSE,fileEncoding='latin1')
+st$Proposed_annotation <- trimws(as.character(st$Proposed_annotation))
+st <- st[st$analysis_set=='primary',,drop=FALSE]
+
+p_fmt <- function(x) {
+ if(length(x)==0 || is.na(x)) return('NA')
+ if(x<0.0001) return(formatC(x,format='e',digits=1))
+ formatC(x,format='f',digits=3)
+}
+
+make_section <- function(section,organisms,width,height) {
+ sel <- selected[selected$section==section,,drop=FALSE]
+ all_long <- list(); labels <- list(); audit <- list()
+ for(i in seq_len(nrow(sel))) {
+   f <- sel[i,]; raw <- raws[[f$mode]]
+   hit <- which(as.character(raw[['row m/z']])==f$feature_id)
+   if(length(hit)!=1) stop('Feature not found exactly once: ',f$mode,' ',f$feature_id)
+   # Metadata has one record per specimen (mode is NEG only), but the same
+   # specimens are measured in both NEG and POS intensity matrices.
+   # Do not filter metadata by mode: doing so drops ALL positive-mode samples.
+   mm <- meta[meta$organism %in% organisms,,drop=FALSE]
+   if(nrow(mm)==0) stop('No primary metadata specimens for ',f$compound)
+   if(anyDuplicated(mm$sample)) stop('Duplicate metadata sample for ',f$mode)
+   absent <- setdiff(mm$sample,names(raw))
+   if(length(absent)) stop('Samples absent from ',f$mode,' matrix: ',paste(absent,collapse=', '))
+   v <- suppressWarnings(as.numeric(unlist(raw[hit,mm$sample,drop=FALSE],use.names=FALSE)))
+   if(length(v)!=nrow(mm) || anyNA(v) || any(v<0)) stop('Invalid intensity data for ',f$feature_id)
+   df <- data.frame(section=section,compound=f$compound,mode=f$mode,feature_id=f$feature_id,
+                    sample=mm$sample,organism=mm$organism,region=mm$region,intensity=v,
+                    detected=v>0,stringsAsFactors=FALSE)
+   all_long[[i]] <- df
+   for(org in organisms) {
+     sub <- df[df$organism==org,,drop=FALSE]
+     if(nrow(sub)==0) stop('No samples for ',org,' / ',f$compound)
+     nd <- sub[sub$region=='Niger Delta',,drop=FALSE]
+     ct <- sub[sub$region=='Reference',,drop=FALSE]
+     stat <- st[st$mode==f$mode & st$feature_id==f$feature_id & st$organism==org,,drop=FALSE]
+     if(nrow(stat)!=1) stop('Expected one primary stats row for ',f$compound,' ',org)
+     # Do not claim significance based on test selection; show both raw and adjusted.
+     labels[[length(labels)+1]] <- data.frame(compound=f$compound,organism=org,
+       label=paste0('ND ',sum(nd$detected),'/',nrow(nd),'  |  Ref ',sum(ct$detected),'/',nrow(ct),
+       '\nlimma p ',p_fmt(as.numeric(stat$p_limma_two_sided)),'; q ',p_fmt(as.numeric(stat$q_limma_two_sided_BH)),
+       '\nFisher p ',p_fmt(as.numeric(stat$p_fisher_detection_two_sided)),'; q ',p_fmt(as.numeric(stat$q_fisher_detection_BH))),
+       stringsAsFactors=FALSE)
+     audit[[length(audit)+1]] <- data.frame(compound=f$compound,mode=f$mode,feature_id=f$feature_id,
+       organism=org,ND_detected=sum(nd$detected),ND_total=nrow(nd),
+       Ref_detected=sum(ct$detected),Ref_total=nrow(ct),
+       ND_mean=mean(nd$intensity),Ref_mean=mean(ct$intensity),
+       limma_p=as.numeric(stat$p_limma_two_sided),limma_q=as.numeric(stat$q_limma_two_sided_BH),
+       fisher_p=as.numeric(stat$p_fisher_detection_two_sided),fisher_q=as.numeric(stat$q_fisher_detection_BH))
+   }
+ }
+ dat <- do.call(rbind,all_long); labs <- do.call(rbind,labels)
+ dat$compound <- factor(dat$compound,levels=sel$compound)
+ labs$compound <- factor(labs$compound,levels=sel$compound)
+ dat$organism <- factor(dat$organism,levels=organisms)
+ labs$organism <- factor(labs$organism,levels=organisms)
+ dat$region <- factor(dat$region,levels=c('Reference','Niger Delta'))
+ # A common zero-display floor and identical y limits across organisms PER compound.
+ # facet_grid(scales='free_y') shares one y scale across each compound row.
+ floors <- tapply(dat$intensity,dat$compound,function(x){x<-x[x>0]; if(length(x)) min(x)/3 else NA_real_})
+ overall <- min(dat$intensity[dat$intensity>0])/3
+ floors[is.na(floors)] <- overall
+ dat$plot_value <- ifelse(dat$detected,dat$intensity,as.numeric(floors[as.character(dat$compound)]))
+ dat$signal <- ifelse(dat$detected,'Detected','Not detected')
+ # Place statistics in an annotation band above the observations, at the same
+ # relative height for each species within a compound (avoids overlapping data).
+ upper <- tapply(dat$plot_value,dat$compound,max)
+ labs$y <- as.numeric(upper[as.character(labs$compound)])*20
+ # Invisible anchor reserves space for all statistical annotations.
+ anchor <- data.frame(compound=factor(sel$compound,levels=sel$compound),
+                      organism=factor(rep(organisms[1],nrow(sel)),levels=organisms),
+                      x=1.5,y=as.numeric(upper[sel$compound])*22)
+ set.seed(20261022)
+ g <- ggplot(dat,aes(x=region,y=plot_value,color=region,shape=signal))+
+   geom_point(position=position_jitter(width=.12,height=0),size=2.4,stroke=.85,alpha=.9)+
+   geom_blank(data=anchor,aes(x=x,y=y),inherit.aes=FALSE)+
+   geom_text(data=labs,aes(x=1.5,y=y,label=label),inherit.aes=FALSE,
+             size=3.7,lineheight=1.05,vjust=1,color='black')+
+   facet_grid(compound~organism,scales='free_y',drop=FALSE)+
+   scale_y_log10(labels=scales::label_scientific(digits=1),expand=expansion(mult=c(.05,.05)))+
+   scale_shape_manual(values=c('Detected'=16,'Not detected'=4))+
+   scale_color_manual(values=c('Reference'='#286A8B','Niger Delta'='#B45D36'))+
+   labs(title=if(section=='Chlorophyll') 'Chlorophyll degradation-related features' else 'Starch-related oligosaccharide features',
+        subtitle='Primary specimens; circles = detected, crosses = original zero intensity; p = raw, q = BH-adjusted',
+        x=NULL,y='Relative intensity (log10; zero at display floor)',shape='Feature signal',color='Sampling group')+
+   theme_bw(base_size=15)+
+   theme(plot.title=element_text(size=22,face='bold'),plot.subtitle=element_text(size=13),
+         strip.text=element_text(size=14,face='bold'),
+         strip.text.y=element_text(angle=0),
+         axis.text.x=element_text(angle=25,hjust=1,size=12),axis.text.y=element_text(size=11),
+         legend.position='bottom',panel.grid.minor=element_blank(),
+         panel.spacing=grid::unit(.7,'lines'))
+ prefix <- if(section=='Chlorophyll') 'Supplementary_Chlorophyll' else 'Supplementary_Starch_Oligosaccharides'
+ ggsave(file.path(output_dir,paste0(prefix,'.pdf')),g,width=width,height=height,limitsize=FALSE)
+ ggsave(file.path(output_dir,paste0(prefix,'.png')),g,width=width,height=height,dpi=300,limitsize=FALSE)
+ write.csv(dat,file.path(output_dir,paste0(prefix,'_sample_intensities.csv')),row.names=FALSE)
+ write.csv(do.call(rbind,audit),file.path(output_dir,paste0(prefix,'_statistics.csv')),row.names=FALSE)
+ write.csv(labs,file.path(output_dir,paste0(prefix,'_panel_labels.csv')),row.names=FALSE)
+ print(g)
+ invisible(g)
+}
+
+chlorophyll_plot <- make_section('Chlorophyll',c('Cassava','Plantain','Waterleaf'),width=22,height=25)
+starch_plot <- make_section('Starch',c('Cassava','Plantain','Waterleaf','Flies'),width=25,height=17)
+write.csv(selected,file.path(output_dir,'selected_feature_inventory.csv'),row.names=FALSE)
+writeLines(c(
+ 'CHLOROPHYLL: 7 features x 3 vegetation types, no flies.',
+ 'STARCH: maltose, maltose isomer, maltotriose, maltotetraose x 4 organisms.',
+ 'Annotations use the CURRENT Proposed_annotation feature assignments.',
+ 'Sample metadata is shared across NEG and POS matrices; mode column in metadata is not used to exclude POS specimens.',
+ 'NEG and POS data are never directly compared by absolute intensity.',
+ 'Each metabolite row has one shared log10 axis across organism columns.',
+ 'Crosses denote original zeros, positioned at an artificial plotting floor.',
+ 'Labels report observed detections and precomputed primary limma/Fisher p and BH q.',
+ 'Limma tests abundance; Fisher tests detection frequency.',
+ 'Fly controls comprise Ibadan and Port Harcourt residential specimens.'),
+ file.path(output_dir,'README.txt'))
+cat('\nSaved two supplementary figures and audit CSVs to: ',normalizePath(output_dir),'\n')
