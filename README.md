@@ -19,9 +19,13 @@ The biological samples include cassava, plantain, waterleaf, and wild-caught fli
 
 The R scripts support comparative metabolomics analyses, including statistical testing, multiple-testing correction, metabolite detection comparisons, and visualization of metabolic differences.
 
-## Raw Data Availability
+## Raw LC-MS Data Availability
 
-The raw mass spectrometry data, including positive- and negative-ionization mzML files, will be deposited in the MassIVE repository. The accession number will be provided upon request.
+Raw LC-MS data are deposited in the MassIVE repository under accession **MSV000103910** (DOI: https://doi.org/10.25345/C5J960R0Q).
+
+The dataset includes positive- and negative-ionization mzML files, sample metadata, and acquisition documentation. The dataset is currently private pending public release.
+
+Processed metabolomics datasets and R analysis scripts are provided in this GitHub repository.
 
 ## Sample Metadata
 
