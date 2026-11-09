@@ -23,6 +23,10 @@ The R scripts support comparative metabolomics analyses, including statistical t
 
 The raw mass spectrometry data, including positive- and negative-ionization mzML files, will be deposited in the MassIVE repository. The accession number will be provided upon request.
 
+## Sample Metadata
+
+The `sample_metadata.csv` file contains specimen-level metadata shared by both positive- and negative-ionization LC-MS datasets. Although the `mode` column is labelled `NEG`, the same biological specimens were analysed in both ionization modes. Accordingly, the R scripts match samples using specimen identifiers without filtering the metadata by ionization mode.
+
 ## Reproducibility
 
 The analysis scripts are provided to support transparency and reproducibility. Detailed instructions, required input files, and software dependencies will be documented as the repository is finalized.
