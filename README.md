@@ -62,6 +62,16 @@ The same specimen-level metadata are used for both positive- and negative-ioniza
 
 The analyses are exploratory and do not explicitly adjust for potential dependence among samples collected from the same sampling communities.
 
+## MZmine Processing Workflows
+
+The positive- and negative-ionization LC-MS datasets were processed using **MZmine version 4.50**.
+
+The MZmine batch files documenting the processing workflows and associated parameters are available in the [`mzmine/`](mzmine/) directory.
+
+These batch files can be used with the raw LC-MS data deposited in MassIVE (**MSV000103910**) to reproduce the feature-processing workflows, subject to updating local file paths and output directories.
+
+The resulting processed feature matrices, curated metabolite annotations, and R analysis scripts are provided in the `data/` and `scripts/` directories.
+
 ## Citation
 
 Citation details for the associated manuscript will be added following publication.
